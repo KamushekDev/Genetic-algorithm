@@ -1,4 +1,5 @@
-﻿using Interfaces;
+﻿using System;
+using Interfaces;
 using Types;
 using UnityEngine;
 
@@ -7,8 +8,10 @@ public class Bot : MonoBehaviour, IBot
     public LayerMask wallsLayer;
     public Grid grid;
 
+
     private void Awake()
     {
+        Health = 20;
     }
 
     private void OnDestroy()
@@ -39,21 +42,70 @@ public class Bot : MonoBehaviour, IBot
         transform.position = center;
     }
 
+    void Die()
+    {
+    }
+
     #region IBot
 
-    public int Health { get; private set; }
+    private int _health;
+
+    private const int MaxHealth = 90;
+
+    public int Health
+    {
+        get => _health;
+        private set
+        {
+            if (value <= 0)
+                Die();
+            _health = Math.Min(value, MaxHealth);
+        }
+    }
+
+    private readonly Collider2D[] _colliders = new Collider2D[5];
 
     public CellResult Move(Direction moveDirection)
     {
-        Vector3 directionVector = moveDirection.GetVector();
+        Vector3 directionVector = moveDirection.GetVector(transform.lossyScale);
 
         var cell = grid.WorldToCell(transform.position + directionVector);
         var center = grid.GetCellCenterWorld(cell);
         var result = CellResult.Empty;
-        if (Physics2D.OverlapCircle(center, .3f, wallsLayer.value))
-            return CellResult.Wall;
+        var colliders = Physics2D.OverlapCircleNonAlloc(center, .3f, _colliders);
+        if (colliders > 0)
+        {
+            var firstCollider = _colliders[0];
 
-        //todo: rest results
+            switch (firstCollider)
+            {
+                case var c when c.CompareTag("Collectable"):
+                    var collectable = c.GetComponent<CollectableScript>();
+                    switch (collectable.type)
+                    {
+                        case CollectableType.Food:
+                            result = CellResult.Food;
+                            break;
+                        case CollectableType.Poison:
+                            result = CellResult.Poison;
+                            break;
+                        case CollectableType.Corpse:
+                            result = CellResult.Corpse;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    Health += collectable.healthChange;
+                    collectable.Collect();
+                    break;
+                case var c when c.CompareTag("Walls"):
+                    return CellResult.Wall;
+                case var c when c.CompareTag("Bot") || c.CompareTag("Player"):
+                    return CellResult.Bot;
+            }
+        }
+
         Move(directionVector);
         return result;
     }

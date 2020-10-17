@@ -4,28 +4,40 @@ using UnityEngine;
 
 public static class DirectionExtensions
 {
-    public static Vector2 GetVector(this Direction direction)
+    public static Vector2 GetVector(this Direction direction, Vector2 scale)
     {
+        Vector2 result;
+
         switch (direction)
         {
             case Direction.North:
-                return new Vector2(0, 1);
+                result = new Vector2(0, 1);
+                break;
             case Direction.NorthWest:
-                return new Vector2(-1, 1);
+                result = new Vector2(-1, 1);
+                break;
             case Direction.West:
-                return new Vector2(-1, 0);
+                result = new Vector2(-1, 0);
+                break;
             case Direction.SouthWest:
-                return new Vector2(-1, -1);
+                result = new Vector2(-1, -1);
+                break;
             case Direction.South:
-                return new Vector2(0, -1);
+                result = new Vector2(0, -1);
+                break;
             case Direction.SouthEast:
-                return new Vector2(1, -1);
+                result = new Vector2(1, -1);
+                break;
             case Direction.East:
-                return new Vector2(1, 0);
+                result = new Vector2(1, 0);
+                break;
             case Direction.NorthEast:
-                return new Vector2(1, 1);
+                result = new Vector2(1, 1);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
         }
+
+        return Vector2.Scale(result, scale);
     }
 }

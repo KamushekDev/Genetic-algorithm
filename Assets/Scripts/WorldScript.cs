@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,7 @@ public class WorldScript : MonoBehaviour
     public Vector2 rightCorner;
     public GameObject foodObject;
     public GameObject poisonObject;
+
 
     private GameObject _foodListObject;
     private GameObject _poisonListObject;
@@ -32,13 +34,17 @@ public class WorldScript : MonoBehaviour
         Destroy(foods);
         Destroy(poisons);
 
+        var poisonScript = poisonObject.GetComponent<CollectableScript>();
+        poisonScript.DestroyMe = go => _poisonList.Remove(go);
+        var foodScript = foodObject.GetComponent<CollectableScript>();
+        foodScript.DestroyMe = go => _foodList.Remove(go);
+
         _worldGrid = GetComponent<Grid>();
 
         for (int i = 0; i < maxFoodAmount; i++)
             SpawnFood();
         for (int i = 0; i < maxPoisonAmount; i++)
             SpawnPoison();
-
 
         GameEvents.Instance.Tick += OnTick;
     }
@@ -57,6 +63,7 @@ public class WorldScript : MonoBehaviour
         var poison = Instantiate(poisonObject, _poisonListObject.transform);
         poison.transform.position = GetRandomEmptyCellCenter();
         _poisonList.Add(poison);
+        Debug.Log($"Spawned poison item at {poison.transform.position}");
     }
 
     private void SpawnFood()
@@ -64,6 +71,7 @@ public class WorldScript : MonoBehaviour
         var food = Instantiate(foodObject, _foodListObject.transform);
         food.transform.position = GetRandomEmptyCellCenter();
         _foodList.Add(food);
+        Debug.Log($"Spawned food item at {food.transform.position}");
     }
 
     Vector3 GetRandomEmptyCellCenter()

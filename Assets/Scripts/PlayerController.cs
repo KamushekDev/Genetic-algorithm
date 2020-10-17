@@ -5,10 +5,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     private PlayerActionControls _playerActionControls;
-    private Collider2D _collider;
-
-    public LayerMask collidersLayer;
-    public Grid grid;
 
     private Action<InputAction.CallbackContext> _moveU;
     private Action<InputAction.CallbackContext> _moveD;
@@ -70,27 +66,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetPositionAlignedToCell(transform.position);
-    }
-
-    void SetPositionAlignedToCell(Vector3 position)
-    {
-        var cell = grid.WorldToCell(position);
-        var center = grid.GetCellCenterWorld(cell);
-        transform.position = center;
     }
 
     // Update is called once per frame
     void Update()
     {
-    }
-
-    private void Move(Vector2 direction)
-    {
-        var newPos = transform.position + (Vector3) direction;
-        var cell = grid.WorldToCell(newPos);
-        var center = grid.GetCellCenterWorld(cell);
-        if (!Physics2D.OverlapBox(center, transform.localScale * .95f, 0f, collidersLayer.value))
-            SetPositionAlignedToCell(newPos);
     }
 }

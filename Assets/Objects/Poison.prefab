@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: -8900199031995418784}
   - component: {fileID: 4836178342383258444}
   - component: {fileID: 3444345428452199979}
+  - component: {fileID: -2571025556889585539}
   m_Layer: 0
   m_Name: Poison
-  m_TagString: Untagged
+  m_TagString: Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,3 +132,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-2571025556889585539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3766658080035834943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54847e0499fb64e4bb9f287daaaef1aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  healthChange: -20

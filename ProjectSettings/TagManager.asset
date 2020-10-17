@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Collectable
+  - Bot
+  - Walls
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - 
   - Walls
   - Collectables
-  - 
+  - Bots
   - 
   - 
   - 
@@ -48,6 +50,6 @@ TagManager:
   - name: Collectables
     uniqueID: 2869324671
     locked: 0
-  - name: Players
+  - name: Bots
     uniqueID: 2108420049
     locked: 0

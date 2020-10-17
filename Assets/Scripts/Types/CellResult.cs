@@ -4,6 +4,7 @@ namespace Types
     {
         Empty,
         Food,
+        Corpse,
         Poison,
         Bot,
         Wall
